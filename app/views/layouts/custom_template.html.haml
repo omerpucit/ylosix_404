@@ -1,0 +1,18 @@
+!!! 5
+%html
+  %head
+    = render 'layouts/header'
+
+    - unless @head_javascript.blank?
+      %script{:type => 'text/javascript'}
+        = @head_javascript.html_safe
+
+    - unless @head_css.blank?
+      %style{:type => 'text/css'}
+        = @head_css.html_safe
+
+  %body
+    ="<!-- #{@variables['commerce'].to_liquid} -->".html_safe
+    = @body_content.html_safe
+
+    = console if Rails.env.development?

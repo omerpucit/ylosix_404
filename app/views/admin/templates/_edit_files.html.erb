@@ -1,0 +1,31 @@
+<script src="/plugins/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<% keys = local_assigns[:files].keys.sort %>
+<% keys.each do |key| %>
+    <% value = local_assigns[:files][key] %>
+    <% next if value.nil? %>
+    <li class="string input optional stringish">
+      <textarea id="template_<%= key %>" name="template[<%= key %>]" class="hide"></textarea>
+      <label for="<%= key %>" class="label"><%= key %></label>
+      <div id="<%= key %>" class="editor_html"><%= value %></div>
+    </li>
+
+    <script type="text/javascript">
+        var e_<%= key %> = ace.edit("<%= key %>");
+        var ta_<%= key %> = $("#template_<%= key %>");
+        ta_<%= key %>.val(e_<%= key %>.getSession().getValue());
+
+        e_<%= key %>.setTheme("ace/theme/crimson_editor");
+
+        <% if key.include? 'js' %>
+            e_<%= key %>.getSession().setMode("ace/mode/javascript");
+        <% elsif key.include? 'css' %>
+            e_<%= key %>.getSession().setMode("ace/mode/css");
+        <% else %>
+            e_<%= key %>.getSession().setMode("ace/mode/html");
+        <% end %>
+        e_<%= key %>.getSession().on('change', function () {
+            ta_<%= key %>.val(e_<%= key %>.getSession().getValue());
+        });
+    </script>
+<% end %>

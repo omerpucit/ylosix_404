@@ -1,0 +1,12 @@
+- if @variables['products'].any?
+  %div.col-md-12
+    %div.thumbnail
+      = "#{@variables['products'].length} products"
+
+  - @variables['products'].each do |product|
+    = render partial: 'layouts/components/product_grid_view', locals: {product: product}
+- else
+  %div.col-md-12
+    %div{:class => 'alert alert-warning', :role => 'alert'}
+      %span{:class => 'fa fa-exclamation-triangle', 'aria-hidden' => 'true'}
+      Sorry no products.

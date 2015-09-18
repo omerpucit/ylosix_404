@@ -1,0 +1,73 @@
+%h1 Cart
+
+- if !@variables['shopping_cart'].nil? && @variables['shopping_cart'].shopping_carts_products.any?
+  %ul.list-unstyled
+    %li
+      %div.row
+        %div{class: 'col-md-6 col-xs-6'}
+        %div{class: 'col-md-3 col-xs-3'}
+          Price
+        %div{class: 'col-md-3 col-xs-3'}
+          Quantity
+
+    - @variables['shopping_cart'].shopping_carts_products.each do |scp|
+      - product = scp.product
+      %li.sc-list-item-border
+
+        %div.row
+          %div{class: 'col-md-6 col-xs-6'}
+            %div{:class => 'item-image col-md-3'}
+              = image_tag product.retrieve_main_image(:thumbnail)
+            %div{:class => 'col-md-9 col-xs-12'}
+              = link_to product.name, show_slug_products_path(product.slug)
+              %br
+              = link_to 'remove', delete_from_shopping_cart_products_path(product)
+          %div{class: 'col-md-3 col-xs-3'}
+            %div.a-color-price
+              = "#{product.retail_price} €"
+          %div{class: 'col-md-3 col-xs-3'}
+            %div.col-md-12
+              %div.form-group
+                %div{id:"form-quantity-#{scp.id}", class: 'hidden'}
+                  = form_tag update_customers_shopping_carts_path(product.id), method: 'post' do
+                    %div.col-md-8
+                      %input{id: "input-quantity-#{scp.id}", type: 'number', name: 'quantity', min: '1', value: scp.quantity, class: 'form-control'}
+                    %div.col-md-4
+                      %input{type: 'submit', value: 'Submit', class: 'btn btn-warning'}
+
+                %div{id: "select-quantity-#{scp.id}", :class => 'btn-group', :role => 'group'}
+                  %button{:type => 'button', :class => 'btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown', 'aria-expanded' => 'false'}
+                    = scp.quantity
+                    %span.caret
+
+                  %ul{:class => 'dropdown-menu', :role => 'menu'}
+                    - (1..9).each do |i|
+                      %li
+                        %a{href: "javascript:modify_quantity_form(#{scp.id}, #{i});"}
+                          = i
+                    %li{:role => 'presentation', :class => 'divider'}
+                    %li
+                      %a{onclick: "javascript:show_quantity_form(#{scp.id});"}
+                        10+
+
+    %li.sc-list-item-border
+      %div.row
+        %div{class: 'col-md-6'}
+        %div{class: 'col-md-6 col-xs-12'}
+          %div.pull-right
+            %span
+              = "Subtotal (#{@variables['shopping_cart'].total_products} products): "
+            %span.a-color-price
+              = "#{@variables['shopping_cart'].total_retail_price} €"
+- else
+  %div.row
+    %div.col-md-12
+      %div{:class => 'alert alert-warning', :role => 'alert'}
+        %span{:class => 'fa fa-exclamation-triangle', 'aria-hidden' => 'true'}
+        %i Your cart is empty.
+
+%div{class: 'row voffset3'}
+  %div{class: 'col-md-2'}
+    = link_to 'Continue shopping', @variables['commerce']['root_href'], class: 'btn btn-block btn-default'
+  %div{class: 'col-md-offset-8 col-md-2'}
+    = link_to 'Shipping', shipping_method_customers_shopping_orders_path, class: 'btn btn-block btn-success btn-default'

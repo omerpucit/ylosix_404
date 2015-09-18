@@ -1,0 +1,125 @@
+:javascript
+  $(document).ready(function() {
+    window.print();
+  });
+
+- commerce = shopping_order.commerce
+%div.container
+  %div.row
+    %div.col-xs-12
+
+      %div.row
+        %div.col-xs-8
+          %h2
+            = image_tag @variables['commerce']['image_src'], :alt => 'Invoice'
+
+        %div{class: 'col-xs-4 text-right'}
+          %ul.list-unstyled
+            %li
+              %h2
+                = "ORDER N.º #{shopping_order.retrieve_order_num}"
+            - if !commerce.nil? && commerce.billing_address.nil?
+              %li
+                = render partial: 'shopping_orders/invoice_address', locals: { address: commerce.billing_address }
+
+      %hr
+      %div.row
+        %div.col-xs-6
+          %address
+            %strong Billed To:
+            - unless shopping_order.billing_address.nil?
+              = render partial: 'shopping_orders/invoice_address', locals: { address: shopping_order.billing_address }
+
+        %div{class: 'col-xs-6 text-right'}
+          %address
+            %strong Shipped To:
+            - unless shopping_order.shipping_address.nil?
+              = render partial: 'shopping_orders/invoice_address', locals: { address: shopping_order.shipping_address }
+
+      %div.row
+        %div.col-xs-6
+          %address
+            %strong Payment Method:
+            %br
+            Visa ending **** 4242
+            %br
+            jsmith@email.com
+        %div{class: 'col-xs-6 text-right'}
+          %address
+            %strong
+              Order Date:
+            %br
+            = l shopping_order.created_at, format: :long
+
+  %div.row
+    %div.col-xs12
+      %div{class: 'panel panel-default'}
+        %div.panel-heading
+          %h3.panel-title
+            %strong Order summary
+
+        %div.panel-body
+          %div.table-responsive
+            %table{class: 'table table-condensed'}
+              %thead
+                %tr
+                  %td.col-xs-1
+                    %strong Quantity
+                  %td.col-xs-6
+                    %strong Item
+                  %td{class: 'col-xs-1 text-center'}
+                    %strong Price without tax
+                  %td{class: 'col-xs-1 text-center'}
+                    %strong Tax
+                  %td{class: 'col-xs-1 text-center'}
+                    %strong Price with tax
+                  %td{class: 'col-xs-2 text-right'}
+                    %strong Totals
+              %tbody
+                - shopping_order.shopping_orders_products_plus_carrier.each do |sop|
+                  - if sop.is_a?(Hash)
+                    %tr
+                      %td.text-center
+                      %td
+                        = sop[:product]
+                      %td.text-center
+                        = sop[:retail_price_pre_tax]
+                      %td.text-center
+                      %td.text-center
+                      %td.text-right
+                        = sop[:retail_price]
+                  - else
+                    %tr
+                      %td.text-center
+                        = sop.quantity unless sop.quantity.nil?
+                      %td
+                        = sop.product.name
+                      %td.text-center
+                        = sop.retail_price_pre_tax
+                      %td.text-center
+                        = "#{sop.tax_rate}%"
+                      %td.text-center
+                        = sop.retail_price
+                      %td.text-right
+                        = sop.quantity * sop.retail_price if !sop.quantity.nil? && !sop.retail_price.nil?
+
+                %tr
+                  %td{class: 'no-line', 'colspan' => 5}
+                    %strong Shipping
+                  %td{class: 'no-line text-right'}
+                    $15
+
+                %tr
+                  %td{class: 'thick-line', 'colspan' => 6}
+                    %div{class: 'col-xs-offset-6 col-xs-2 text-center'}
+                      %strong Subtotal without tax
+                      %br
+                      = "#{shopping_order.total_retail_price_pre_tax} €"
+                    %div{class: 'col-xs-2 text-center'}
+                      %strong Taxes
+                      %br
+                      = "#{shopping_order.total_taxes} €"
+                    %div{class: 'col-xs-2 text-center'}
+                      %strong Total
+                      %br
+                      = "#{shopping_order.total_retail_price} €"

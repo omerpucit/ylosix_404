@@ -1,0 +1,48 @@
+%h1 My orders
+%hr
+
+%ul.product-list
+  - @variables['shopping_orders'].each do |order|
+    %li
+      %div{:class => 'row order_highlight'}
+        %div.col-md-9
+          %div.col-md-3
+            %label
+              ORDER DATE
+            %br
+            = l order.created_at, :format => :long
+          %div.col-md-3
+            %label
+              TOTAL
+            %br
+            = "#{order.total_retail_price} €"
+          %div.col-md-4
+            = shopping_order_status(order)
+        %div.col-md-3
+          %div.pull-right
+            %label
+              ORDER N.º
+            = order.retrieve_order_num
+            %br
+            = link_to 'Details', '#', class: 'btn btn-default'
+            - if !order.shopping_orders_status.nil? && order.shopping_orders_status.enable_invoice
+              = link_to 'Invoice', orders_invoice_customers_path(order.id), target: '_blank', class: 'btn btn-default'
+      %div{:class => 'order_container'}
+        - order.shopping_orders_products.each do |sop|
+          - product = sop.product
+          %div.row
+            %div.col-md-6
+              %div.col-md-3
+                = image_tag product.retrieve_main_image(:thumbnail)
+              %div.col-md-9
+                %div.col-md-12
+                  = link_to product.name, show_slug_products_path(product.slug)
+                %br
+                %div.col-md-12
+                  = "Quantity: #{sop.quantity}"
+
+                %div{class: 'col-md-12 a-color-price'}
+                  = "#{sop.retail_price} €"
+
+                %div.col-md-6
+                  = link_to 'Buy another', add_to_shopping_cart_products_path(product), :class => 'btn btn-default btn-block'

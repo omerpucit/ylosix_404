@@ -1,0 +1,26 @@
+sudo: false
+cache: bundler
+language: ruby
+rvm:
+  - 2.0.0
+  - 2.1.6
+  - 2.2
+  - ruby-head
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+before_install:
+  - gem update --remote bundler
+install:
+  - bundle install --retry=3 --without development --without production
+script:
+  - RAILS_ENV=test bundle exec rake db:create
+  - RAILS_ENV=test bundle exec rake
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
+  - mailcatcher
+notifications:
+  slack:
+    rooms:
+      - ylos:PdkYQ8whHX8Wp4dGyOGSmq7x#notificationsci

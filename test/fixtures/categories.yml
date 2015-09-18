@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: categories
+#
+#  created_at       :datetime         not null
+#  enabled          :boolean          default(FALSE)
+#  id               :integer          not null, primary key
+#  meta_description :string
+#  meta_keywords    :string
+#  name             :string
+#  parent_id        :integer
+#  priority         :integer          default(1), not null
+#  reference_code   :string
+#  show_action_name :string
+#  updated_at       :datetime         not null
+#  visible          :boolean          default(TRUE)
+#
+# Indexes
+#
+#  index_categories_on_parent_id       (parent_id)
+#  index_categories_on_reference_code  (reference_code)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+root:
+  parent_id: nil
+  enabled: true
+  name: root
+
+digital_cameras:
+  parent: root
+  name: Digital cameras
+  enabled: true
+  visible: true
+  meta_keywords: MyString
+  meta_description: MyString
+

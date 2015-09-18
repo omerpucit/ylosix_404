@@ -1,0 +1,79 @@
+# == Schema Information
+#
+# Table name: products
+#
+#  barcode              :string
+#  control_stock        :boolean          default(FALSE)
+#  created_at           :datetime
+#  depth                :decimal(10, 6)   default(0.0), not null
+#  description          :text
+#  enabled              :boolean          default(FALSE)
+#  height               :decimal(10, 6)   default(0.0), not null
+#  id                   :integer          not null, primary key
+#  image_content_type   :string
+#  image_file_name      :string
+#  image_file_size      :integer
+#  image_updated_at     :datetime
+#  meta_description     :string
+#  meta_keywords        :string
+#  name                 :string
+#  publication_date     :datetime         default(Thu, 01 Jan 2015 00:00:00 UTC +00:00), not null
+#  reference_code       :string
+#  retail_price         :decimal(10, 2)   default(0.0), not null
+#  retail_price_pre_tax :decimal(10, 5)   default(0.0), not null
+#  short_description    :string
+#  show_action_name     :string
+#  stock                :integer          default(0)
+#  tax_id               :integer
+#  unpublication_date   :datetime
+#  updated_at           :datetime
+#  visible              :boolean          default(TRUE)
+#  weight               :decimal(10, 6)   default(0.0), not null
+#  width                :decimal(10, 6)   default(0.0), not null
+#
+# Indexes
+#
+#  index_products_on_tax_id  (tax_id)
+#
+# Foreign Keys
+#
+#  fk_rails_f5661f270e  (tax_id => taxes.id)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+camera:
+  reference_code: ref1
+  name: Canon 450D
+  barcode: 123456789
+  enabled: true
+  visible: true
+  short_description: Camera reflex canon 12MP.
+  description: Camera reflex canon 12MP (not includes SD).
+
+  retail_price_pre_tax: 350
+  retail_price: 423.5
+  tax: iva_es
+
+  meta_keywords: canon_450d
+  meta_description: Camera reflex canon
+  stock: 100
+  control_stock: true
+
+lens_canon:
+  reference_code: ref2
+  name: Lens canon
+  barcode: 12345666
+  enabled: true
+  visible: true
+  short_description: Camera lens canon.
+  description: Camera lens canon.
+
+  retail_price_pre_tax: 100
+  retail_price: 120
+  tax: iva_es
+
+  meta_keywords: lenses_canon_
+  meta_description: Lens canon
+  stock: 50
+  control_stock: true

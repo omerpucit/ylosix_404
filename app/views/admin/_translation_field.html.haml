@@ -1,0 +1,13 @@
+%li{id: "#{id_prefix}_input", class: 'string input optional stringish'}
+  %label{class: 'label', for: id_prefix}
+    = input_label
+    - if language.flag?
+      = image_tag(language.flag.url(:original))
+    - else
+      = language.locale
+  = text_field_tag "#{input_name_prefix}[locale]", language.locale, {type: 'hidden'}
+
+  - unless id.nil?
+    = text_field_tag "#{input_name_prefix}[id]", id, {type: 'hidden'}
+
+  = component

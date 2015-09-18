@@ -1,0 +1,15 @@
+%li{id: 'product_products_tags_input', class: 'input optional'}
+  %fieldset.choices
+    %legend.label
+      = label_tag 'tags', 'Products tags'
+
+    %ol.choices-group
+      - tags_groups.each do |group|
+        %li{class: 'choice', style: 'margin-bottom: 18px;'}
+          = "<b>#{group.name}</b>".html_safe
+
+          - if group.tags.any?
+            %br
+              %div.choices-subgroup
+                - group.tags.each do |child|
+                  = render partial: 'admin/products/tag_choice', locals: { products_tags: products_tags, tag: child }

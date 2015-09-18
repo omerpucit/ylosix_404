@@ -1,0 +1,30 @@
+%h1
+  My addresses
+%hr
+
+%p
+  Configure your shipping and billing addresses. This addresses will be selected when you create an order.
+
+%div{class: 'row voffset3'}
+  %div.col-md-12
+    - if @variables['customer_addresses'].empty?
+      %div{:class => 'alert alert-warning'}
+        %span{:class => 'fa fa-exclamation-triangle', 'aria-hidden' => 'true'}
+        No address available.
+        = link_to 'Add address', @variables['customer_new_address_href']
+    - else
+      %div.row
+        - @variables['customer_addresses'].each do |address|
+          %div.col-md-4
+            = render partial: 'addresses/address', locals: {address: address}
+
+            = link_to 'Edit', edit_customers_address_path(address), class: 'btn btn-default btn-block'
+            = link_to 'Destroy', customers_address_path(address), :method => :delete, class: 'btn btn-danger btn-block'
+
+%div{class: 'row voffset3'}
+  %div.col-md-3
+    = link_to 'Add address', @variables['customer_new_address_href'], class: 'btn btn-success btn-block'
+
+%div{class: 'row voffset3'}
+  %div.col-md-3
+    = link_to 'Back to my account', show_customers_path, class: 'btn btn-default btn-block'
